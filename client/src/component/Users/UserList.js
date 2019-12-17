@@ -13,11 +13,6 @@ function UserList() {
   const [showDeleteConfirm, setShowConfirm] = useState(false);
   const [deleteUser, { loading: removeLoading, data: mutationData }] = useMutation(REMOVE_USER);
 
-  useEffect(() => {
-    console.log(data);
-    return () => {};
-  }, [data]);
-
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :(</p>;
 

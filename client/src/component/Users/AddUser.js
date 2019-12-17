@@ -39,7 +39,7 @@ function AddUser() {
           password: password,
           role: role
         },
-        refetchQueries: ['UsersQuery']
+        refetchQueries: [{ query: UsersQuery }]
       });
   };
 

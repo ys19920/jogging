@@ -1,10 +1,7 @@
 const User = require('../models/user');
 const resolvers = {
   Query: {
-    users: () => {
-      console.log('ajskda');
-      return User.find({});
-    },
+    users: () => User.find({}),
     user: (parent, args) => {
       return User.findById(args.id);
     }
