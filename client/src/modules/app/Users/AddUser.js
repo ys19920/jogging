@@ -1,38 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { useMutation, useQuery } from '@apollo/react-hooks';
-import { UserQuery } from '../../graphql/query';
-import { UPDATE_USER } from '../../graphql/mutation';
-import { useParams } from 'react-router';
-
+import React, { useState } from 'react';
+import { useMutation } from '@apollo/react-hooks';
+import { UsersQuery } from '../../../graphql/query';
+import { ADD_USER } from '../../../graphql/mutation';
 import { Link } from 'react-router-dom';
-import {
-  Header,
-  Segment,
-  Container,
-  Form,
-  Button,
-  Dimmer,
-  Loader,
-  Dropdown
-} from 'semantic-ui-react';
+import { Header, Segment, Container, Form, Button, Dropdown } from 'semantic-ui-react';
 
-function EditUser() {
-  const { id } = useParams();
-  const [updateUser] = useMutation(UPDATE_USER);
+function AddUser() {
+  const [addUser] = useMutation(ADD_USER);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('user');
-  const { loading, data } = useQuery(UserQuery, {
-    variables: { id: id }
-  });
-  useEffect(() => {
-    if (data) {
-      setName(data.user.name);
-      setEmail(data.user.email);
-      setRole(data.user.role);
-    }
-  }, [data]);
   const roleOptions = [
     {
       key: 'user',
@@ -54,33 +32,34 @@ function EditUser() {
   const onSubmit = e => {
     e.preventDefault();
     if (name && email)
-      updateUser({
+      addUser({
         variables: {
-          id: id,
           name: name,
           email: email,
           password: password,
           role: role
         },
-        refetchQueries: ['UserQuery']
+        refetchQueries: [{ query: UsersQuery }]
       });
   };
 
   return (
     <Container className="main-app-container">
-      <Header as="h2" content={'Edit User'} textAlign="center" />{' '}
-      <Dimmer active={loading}>
-        <Loader />
-      </Dimmer>
+      <Header as="h2" content={'New User'} textAlign="center" />
       <Form onSubmit={onSubmit}>
         <Segment>
           <Header as="h4" content="Basic Info" dividing />
-          <Form.Input label="Name" required value={name} onChange={e => setName(e.target.value)} />
+          <Form.Input
+            label="Name"
+            required
+            value={name || ''}
+            onChange={e => setName(e.target.value)}
+          />
           <Form.Input
             label="Email"
             type="email"
             required
-            value={email}
+            value={email || ''}
             onChange={e => setEmail(e.target.value)}
           />
           <Form.Input
@@ -103,9 +82,9 @@ function EditUser() {
           </Form.Field>
         </Segment>
         <Button color="blue">Save</Button>&nbsp;&nbsp;
-        <Link to="/">Cancel</Link>
+        <Link to="/users">Cancel</Link>
       </Form>
     </Container>
   );
 }
-export default EditUser;
+export default AddUser;

@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation } from '@apollo/react-hooks';
-import { UsersQuery, UserQuery } from '../../graphql/query';
-import { REMOVE_USER } from '../../graphql/mutation';
+import { UsersQuery, UserQuery } from '../../../graphql/query';
+import { REMOVE_USER } from '../../../graphql/mutation';
 import { Link } from 'react-router-dom';
 import { Table, Header, Container, Button, Confirm } from 'semantic-ui-react';
-import Pagination from '../../components/Pagination';
-import PageSize from '../../components/PageSize';
+import Pagination from '../../../components/Pagination';
+import PageSize from '../../../components/PageSize';
 
 function UserList() {
   const { loading, error, data } = useQuery(UsersQuery);
