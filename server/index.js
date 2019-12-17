@@ -1,0 +1,34 @@
+const { ApolloServer } = require('apollo-server-express');
+const express = require('express');
+const cors = require('cors');
+const app = express();
+const PORT = 4000;
+const config = require('./config');
+const mongoose = require('mongoose');
+const { typeDefs } = require('./graphql/types');
+const { resolvers } = require('./graphql/resolver');
+app.use(cors());
+
+//mongodb
+mongoose.set('useNewUrlParser', true);
+mongoose.set('useCreateIndex', true);
+mongoose.set('useUnifiedTopology', true);
+mongoose.connect(config.mongoURL, error => {
+  if (error) {
+    console.error('Please make sure Mongodb is installed and running!'); // eslint-disable-line no-console
+    throw error;
+  }
+  console.log('Connected to MongoDB'); // eslint-disable-line
+});
+
+const server = new ApolloServer({ typeDefs, resolvers });
+// server.listen().then(({ url }) => {
+//   console.log(`� Server ready at ${url}`);
+// });
+server.applyMiddleware({
+  app // app is from an existing express app
+});
+
+app.listen({ port: PORT }, () =>
+  console.log(`Server ready at http://localhost:4000${server.graphqlPath}`)
+);
