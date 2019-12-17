@@ -27,3 +27,11 @@ export const REMOVE_USER = gql`
     }
   }
 `;
+export const GET_TOKEN = gql`
+  mutation($id: String!) {
+    removeUser(id: $id) {
+      id
+      name
+    }
+  }
+`;

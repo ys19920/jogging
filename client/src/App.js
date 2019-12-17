@@ -1,32 +1,30 @@
 import React from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
-import UserList from './modules/app/Users/UserList';
-import AddUser from './modules/app//Users/AddUser';
-import EditUser from './modules/app/Users/EditUser';
-import TopBar from './components/TopBar';
-import './App.css';
+import { Switch, Route, BrowserRouter } from 'react-router-dom';
+import AuthModule from './modules/auth';
+import AppModule from './modules/app';
+import styled from 'styled-components';
 
-function routes() {
-  return (
-    <div>
-      {' '}
-      {/* <Route exact path="/" component={UserList} /> */}
-      <Route exact path="/users" component={UserList} />
-      <Route exact path="/users/edit/:id" component={EditUser} />
-      <Route exact path="/users/new" component={AddUser} />
-    </div>
-  );
-}
+const AppWrapper = styled.div`
+  max-width: calc(768px + 16px * 2);
+  margin: 0 auto;
+  display: flex;
+  min-height: 100%;
+  padding: 0 16px;
+  flex-direction: column;
+`;
+
 function App() {
+  const token = localStorage.getItem('token');
+  const renderApp = () => (token ? <AppModule /> : <AuthModule />);
+
   return (
-    <div className="App">
-      <Router>
-        <div>
-          <TopBar />
-          <div style={{ marginTop: '70px' }}>{routes()}</div>
-        </div>
-      </Router>
-    </div>
+    <AppWrapper>
+      <BrowserRouter>
+        <Switch>
+          <Route path="/" render={renderApp} />
+        </Switch>
+      </BrowserRouter>
+    </AppWrapper>
   );
 }
 
