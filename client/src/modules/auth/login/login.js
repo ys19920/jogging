@@ -9,7 +9,9 @@ function LoginPage() {
   const [password, setPassword] = useState('');
   const [login] = useMutation(LOGIN_MUTATION, {
     onCompleted(data) {
-      console.log(data);
+      var token = data.login;
+      localStorage.setItem('token', token);
+      window.location.href = '/';
     }
   });
   const onSubmit = e => {
