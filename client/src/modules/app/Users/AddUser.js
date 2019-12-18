@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useMutation } from '@apollo/react-hooks';
-import { UsersQuery } from '../../../graphql/query';
-import { ADD_USER } from '../../../graphql/mutation';
+import { UsersQuery } from '../graphql/query';
+import { ADD_USER } from '../graphql/mutation';
 import { Link } from 'react-router-dom';
 import { Header, Segment, Container, Form, Button, Dropdown } from 'semantic-ui-react';
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useMutation, useQuery } from '@apollo/react-hooks';
-import { UserQuery } from '../../../graphql/query';
-import { UPDATE_USER } from '../../../graphql/mutation';
+import { UserQuery } from '../graphql/query';
+import { UPDATE_USER } from '../graphql/mutation';
 import { useParams } from 'react-router';
 
 import { Link } from 'react-router-dom';
