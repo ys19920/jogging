@@ -7,6 +7,7 @@ const config = require('./config');
 const mongoose = require('mongoose');
 const { typeDefs } = require('./graphql/types');
 const { resolvers } = require('./graphql/resolver');
+const jwt = require('express-jwt');
 app.use(cors());
 
 //mongodb
@@ -21,6 +22,11 @@ mongoose.connect(config.mongoURL, error => {
   console.log('Connected to MongoDB'); // eslint-disable-line
 });
 
+// auth middleware
+const auth = jwt({
+  secret: process.env.JWT_SECRET,
+  credentialsRequired: false
+});
 const server = new ApolloServer({ typeDefs, resolvers });
 // server.listen().then(({ url }) => {
 //   console.log(`� Server ready at ${url}`);
