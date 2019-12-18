@@ -27,10 +27,13 @@ const auth = jwt({
   secret: process.env.JWT_SECRET,
   credentialsRequired: false
 });
-const server = new ApolloServer({ typeDefs, resolvers });
-// server.listen().then(({ url }) => {
-//   console.log(`� Server ready at ${url}`);
-// });
+app.use(auth);
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+  context: ({ req, res }) => ({ req, res })
+});
+
 server.applyMiddleware({
   app // app is from an existing express app
 });

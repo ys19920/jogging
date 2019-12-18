@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation } from '@apollo/react-hooks';
-import { UsersQuery, UserQuery } from '../graphql/query';
+import { UsersQuery, CurrentUser } from '../graphql/query';
 import { REMOVE_USER } from '../graphql/mutation';
 import { Link } from 'react-router-dom';
+import { withApollo } from '@apollo/react-hoc';
 import { Table, Header, Container, Button, Confirm } from 'semantic-ui-react';
 
-function UserList() {
+function UserList({ client }) {
   const { loading, error, data } = useQuery(UsersQuery);
+
   const [deleteID, setId] = useState('');
   const [showDeleteConfirm, setShowConfirm] = useState(false);
   const [deleteUser, { loading: removeLoading, data: mutationData }] = useMutation(REMOVE_USER);
@@ -100,4 +102,4 @@ function UserList() {
     </Container>
   );
 }
-export default UserList;
+export default withApollo(UserList);

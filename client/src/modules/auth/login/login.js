@@ -9,7 +9,7 @@ function LoginPage() {
   const [password, setPassword] = useState('');
   const [login] = useMutation(LOGIN_MUTATION, {
     onCompleted(data) {
-      var token = data.login;
+      var { token } = data.login;
       localStorage.setItem('token', token);
       window.location.href = '/';
     }
