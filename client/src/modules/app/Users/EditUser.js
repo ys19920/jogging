@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useMutation, useQuery } from '@apollo/react-hooks';
-import { UserQuery } from '../graphql/query';
+import { UserQuery, CurrentUser } from '../graphql/query';
 import { UPDATE_USER } from '../graphql/mutation';
 import { useParams } from 'react-router';
 
@@ -50,7 +50,12 @@ function EditUser() {
       text: 'admin'
     }
   ];
-
+  const { loading: userDataLoading, data: userData } = useQuery(CurrentUser, {
+    variables: { token: localStorage.getItem('token') }
+  });
+  if (userDataLoading) return <p>Loading</p>;
+  const currentUser = userData.currentUser;
+  console.log(currentUser);
   const onSubmit = e => {
     e.preventDefault();
     if (name && email)
@@ -90,17 +95,19 @@ function EditUser() {
             onChange={e => setPassword(e.target.value)}
           />
 
-          <Form.Field inline required>
-            <label>Role</label>
-            <Dropdown
-              placeholder="Select Role"
-              fluid
-              selection
-              options={roleOptions}
-              value={role}
-              onChange={(e, data) => setRole(data.value)}
-            />
-          </Form.Field>
+          {currentUser.role !== 'user' && (
+            <Form.Field inline required>
+              <label>Role</label>
+              <Dropdown
+                placeholder="Select Role"
+                fluid
+                selection
+                options={roleOptions}
+                value={role}
+                onChange={(e, data) => setRole(data.value)}
+              />
+            </Form.Field>
+          )}
         </Segment>
         <Button color="blue">Save</Button>&nbsp;&nbsp;
         <Link to="/">Cancel</Link>

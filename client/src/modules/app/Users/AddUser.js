@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
-import { useMutation } from '@apollo/react-hooks';
-import { UsersQuery } from '../graphql/query';
+import { useMutation, useQuery } from '@apollo/react-hooks';
+import { UsersQuery, CurrentUser } from '../graphql/query';
 import { ADD_USER } from '../graphql/mutation';
 import { Link } from 'react-router-dom';
 import { Header, Segment, Container, Form, Button, Dropdown } from 'semantic-ui-react';
 
 function AddUser() {
+  const { loading, data } = useQuery(CurrentUser, {
+    variables: { token: localStorage.getItem('token') }
+  });
+
   const [addUser] = useMutation(ADD_USER);
+
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -28,7 +33,8 @@ function AddUser() {
       text: 'admin'
     }
   ];
-
+  if (loading) return <p>Loading</p>;
+  const currentUser = data.currentUser;
   const onSubmit = e => {
     e.preventDefault();
     if (name && email)
@@ -68,18 +74,19 @@ function AddUser() {
             value={password || '****'}
             onChange={e => setPassword(e.target.value)}
           />
-
-          <Form.Field inline required>
-            <label>Role</label>
-            <Dropdown
-              placeholder="Select Role"
-              fluid
-              selection
-              options={roleOptions}
-              value={role}
-              onChange={(e, data) => setRole(data.value)}
-            />
-          </Form.Field>
+          {currentUser.role !== 'user' && (
+            <Form.Field inline required>
+              <label>Role</label>
+              <Dropdown
+                placeholder="Select Role"
+                fluid
+                selection
+                options={roleOptions}
+                value={role}
+                onChange={(e, data) => setRole(data.value)}
+              />
+            </Form.Field>
+          )}
         </Segment>
         <Button color="blue">Save</Button>&nbsp;&nbsp;
         <Link to="/users">Cancel</Link>

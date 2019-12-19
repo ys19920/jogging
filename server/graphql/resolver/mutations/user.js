@@ -10,7 +10,7 @@ module.exports = {
     if (args.role) newUser.role = args.role;
     return newUser.save();
   },
-  async updateUser(parent, args) {
+  async updateUser(parent, args, { req, res }) {
     if (!req.user) throw new Error('You must logged in');
     let user = await User.findById(args.id);
     Object.assign(user, { name: args.name, email: args.email });
@@ -18,7 +18,7 @@ module.exports = {
     if (args.role) user.role = args.role;
     return await user.save();
   },
-  async removeUser(parent, args) {
+  async removeUser(parent, args, { req, res }) {
     if (!req.user) throw new Error('You must logged in');
     let user = await User.findById(args.id);
     return await user.remove();

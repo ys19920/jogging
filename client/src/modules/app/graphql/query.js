@@ -9,9 +9,15 @@ export const UsersQuery = gql`
     }
   }
 `;
+
 export const CurrentUser = gql`
-  query getUser($token: String) {
-    getCurrentUser(token: $token)
+  query getCurrentUser($token: String!) {
+    currentUser(token: $token) {
+      name
+      email
+      id
+      role
+    }
   }
 `;
 

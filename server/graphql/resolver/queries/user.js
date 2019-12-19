@@ -6,5 +6,10 @@ module.exports = {
   },
   user: (parent, args) => {
     return User.findById(args.id);
+  },
+  currentUser: (_, args, { req, res }) => {
+    console.log(args, req.user);
+    if (!req.user) throw new Error('You must logged in');
+    return User.findById(req.user.id);
   }
 };
